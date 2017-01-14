@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body>
+        <h1><a href="./"><%= title %></a></h1>
+        <hr/>
+        <p>Welcome to <%= title %></p>
+
+        <h3>Hello, <%=user.displayName%>!</h3>
+        <h3><%=user.userName%></h3>
+        <h3><%=user.email%></h3>
+        <h3><a href="./user">User Info</a></h3>
+        <h3><a href="./logout">Logout</a></h3>
+
+    </body>
+</html>
