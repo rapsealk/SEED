@@ -3,22 +3,20 @@ var router = express.Router();
 
 const firebase = require('firebase');
 
+var rest = require('../API/REST');
+
 router.get('/', function(req, res, next) {
     console.log('get::user');
 
     var user = firebase.auth().currentUser;
 
     res.render('user', { title: 'User',
-                         user: user });
-
+        user: user });
 
 });
-/*
-router.post('/', function(req, res) {
-    console.log('post::user');
-    //res.redirect('./user');
-    res.render('user', { title: 'User',
-        email: req.body.email });
+
+router.get('/delete', function(req, res) {
+    rest.deleteUser(req, res);
 });
-*/
+
 module.exports = router;

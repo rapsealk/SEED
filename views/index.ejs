@@ -5,15 +5,16 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-  <h1><a href="./"><%= title %></a></h1>
+    <h1><a href="./"><%= title %></a></h1>
     <hr/>
     <p>Welcome to <%= title %></p>
     <% if (!email) { %>
     <h3><a href="./login">Login</a></h3>
-    <h3><a href="./register">Register</a></h3>
+    <h3><a href="./signup">Register</a></h3>
     <% } else { %>
     <h3>Hello, <%=email%>!</h3>
     <h3><a href="./user">User Info</a></h3>
+    <h3><a href="/user/delete">Delete</a></h3>
     <h3><a href="./logout">Logout</a></h3>
     <% } %>
   </body>
