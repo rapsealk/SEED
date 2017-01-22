@@ -6,7 +6,7 @@
     </head>
     <body>
         <% if (!(title === 'Error')) { %>
-        <h1><a href="./"><%= title %></a></h1>
+        <h1><img src="favicon-firebase.png"><a href="./"><%= title %></a></h1>
         <hr/>
         <p>Welcome to <%= title %></p>
         <form action="/login" method="post">
@@ -15,7 +15,7 @@
             <input type="submit" value="Login">
         </form>
         <% } else { %>
-        <h1><%= title %></h1>
+        <h1><img src="favicon-firebase.png"><%= title %></h1>
         <hr/>
         <p><%=message%></p>
         <h3><a href="./">Back to Main</a></h3>

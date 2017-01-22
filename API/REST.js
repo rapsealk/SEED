@@ -7,23 +7,26 @@ exports.createUser = function(req, res) {
         email: req.body.email,
         emailVerified: false,
         password: req.body.password,
-        displayName: req.body.email.split('@')[0],
+        displayName: req.body.displayName,
         photoURL: 'https://firebasestorage.googleapis.com/v0/b/seed-3a079.appspot.com/o/favicon-firebase.png?alt=media&token=d4572aea-1901-43b8-a150-508984102fc4',
         disabled: false
     })
         .then(function(userRecord) {
+            admin.database().ref('userInfo/'+userRecord.uid).set({
+                userName: req.body.displayName
+            });
             firebase.auth()
                 .signInWithEmailAndPassword(req.body.email, req.body.password)
                 .then(function() {
                     res.redirect(307, '../..');
                 })
                 .catch(function(error) {
-                    //if (error) console.log(error);
+                    if (error) console.log(error);
                     res.render('problem', { error: error });
                 });
         })
         .catch(function(error) {
-            //if (error) console.log(error);
+            if (error) console.log(error);
             res.render('problem', { error: error });
         });
 };
@@ -62,8 +65,8 @@ exports.updateUser = function(req, res) {
         emailVerified: true,
         password: "newPassword",
         displayName: "Jane Doe",
-        photoURL: "http://www.example.com/12345678/photo.png",
-        disabled: true
+        photoURL: "https://firebasestorage.googleapis.com/v0/b/seed-3a079.appspot.com/o/favicon-firebase.png?alt=media&token=d4572aea-1901-43b8-a150-508984102fc4",
+        disabled: false
     })
         .then(function(userRecord) {
             console.log("Successfully updated user", userRecord.toJSON());
@@ -82,6 +85,8 @@ exports.deleteUser = function(req, res) {
 
     firebase.auth().signOut()
         .then(function() {
+            admin.database().ref('userInfo/'+uid).remove();
+            admin.database().ref('message/'+uid).remove();
             admin.auth().deleteUser(uid)
                 .then(function() {
                     res.redirect('../../');

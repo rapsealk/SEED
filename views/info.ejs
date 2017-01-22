@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+        <style>
+            .btn-link{
+                border:none;
+                outline:none;
+                background:none;
+                cursor:pointer;
+                color:#0000EE;
+                padding:0;
+                text-decoration:underline;
+                font-family:inherit;
+                font-size:inherit;
+            }
+        </style>
+    </head>
+    <body>
+        <h1><a href="./"><%= title %></a></h1>
+        <hr/>
+        <p>Welcome to <%= title %></p>
+
+        <h3>Hello!</h3>
+        <h3>Name: <%=user.displayName%></h3>
+        <h3>Email: <%=user.email%></h3>
+        <h3>Messages <a href="../info/message">ADD</a></h3>
+        <ul>
+            <% for (var i in messages) { %>
+                <li>
+                    <form action="../info/message/delete" method="post">
+                        <%=time[i]%> >> <%=messages[i]%>
+                        <input type="hidden" name="uid" value="<%=user.uid%>">
+                        <input type="hidden" name="timestamp" value="<%=i%>">
+                        <button type="submit" name="your_name" value="your_value" class="btn-link">Delete</button>
+                    </form>
+                </li>
+            <% } %>
+        </ul>
+        <h3><a href="../">Back to main</a></h3>
+        <h3><a href="../logout">Logout</a></h3>
+
+    </body>
+</html>

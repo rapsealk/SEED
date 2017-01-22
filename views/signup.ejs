@@ -8,9 +8,10 @@
         <h1><a href="./"><%= title %></a></h1>
         <hr/>
         <p>Welcome to <%= title %></p>
-        <form action="/signup" method="post">
+        <form action="/request/create" method="post">
             <input type="email" name="email" placeholder="example@seed.com">
             <input type="password" name="password" placeholder="password">
+            <input type="text" name="displayName" placeholder="name" value="<%=nickname%>">
             <input type="submit" value="Register Now!">
         </form>
     </body>
