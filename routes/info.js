@@ -21,7 +21,7 @@ router.get('/', function(req, res) {
                 }
                 res.render('info', { title: 'User', user: user, messages: data, time: time });
             }, function(errorObject) {
-                res.render('problem', { error: errorObject });
+                if (errorObject) res.render('problem', { error: errorObject });
             });
         } else { // No user is signed in.
             res.redirect('../');

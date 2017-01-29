@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var firebase = require('firebase');
+var admin = require('firebase-admin');
+
 var rest = require('../API/REST');
 
 router.get('/', function(req, res) {
@@ -16,7 +19,18 @@ router.get('/delete', function(req, res) {
 });
 
 router.post('/delete', function(req, res) {
-    rest.deleteUser(req, res);
+    console.log('post::delete');
+
+    admin.auth().getUserByEmail(req.body.email)
+        .then(function(userRecord) {
+            req.body.user = userRecord;
+            rest.deleteUser(req, res);
+        })
+        .catch(function(error) {
+            res.rendern('problem', { error: error });
+        })
+    //req.body.user = admin.auth().getUserByEmail(req.body.email);
+    //rest.deleteUser(req, res);
 });
 
 module.exports = router;

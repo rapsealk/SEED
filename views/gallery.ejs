@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>
+            .btn-link{
+                border:none;
+                outline:none;
+                background:none;
+                cursor:pointer;
+                color:#0000EE;
+                padding:0;
+                text-decoration:underline;
+                font-family:inherit;
+                font-size:inherit;
+            }
+        </style>
+    </head>
+    <body>
+        <h1><a href="./"><img src="favicon-firebase.png"><%= title %></a></h1>
+        <hr/>
+        <p>Welcome to <%= title %></p>
+        <a href="../">Back to main</a>
+
+        <script type="text/javascript">
+            var reviewUploading = function(file) {
+                var path = file.value;
+                var filename = path.substring(path.lastIndexOf('\\')+1);
+                var type = filename.split('.')[1];
+                console.log('path:',path);
+                console.log('filename:',filename);
+                console.log('type:',type);
+                console.log('files:',file.files);
+                //var temp = new File(null, file.files[0], null);
+                //console.log(temp);
+                console.log('files[0]:',file.files[0]);
+                console.log('files[0].path:',file.files[0].path);
+                uploadImage(file);
+            };
+        </script>
+
+        <p>Post Image Here</p>
+        <form action="./gallery" method="post">
+            <input type="file" name="image" accept="image/*" onchange="reviewUploading(this);">
+            <input type="submit">
+        </form>
+
+        <hr/>Your Own
+        <img id="own">
+        <hr/>R2D2
+        <img id="R2D2">
+        <hr/>Apink
+        <img id="Apink">
+        <hr/>TWICE
+        <img id="TWICE">
+        <hr/>favicon-firebase
+        <img id="favicon-firebase">
+
+        <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+        <script>
+            var config = {
+                apiKey: "AIzaSyC54g3ZFHO0aq7jFUiaq6e0O0tzR4g3d5U",
+                authDomain: "seed-3a079.firebaseapp.com",
+                databaseURL: "https://seed-3a079.firebaseio.com",
+                storageBucket: "seed-3a079.appspot.com",
+                messagingSenderId: "204598217154"
+            };
+            firebase.initializeApp(config);
+
+            var database = firebase.database();
+            var storage = firebase.storage();
+
+            var setImage = function(key, type) {
+                storage.ref('image').child(key+'.'+type).getDownloadURL()
+                    .then(function(url) {
+                        document.getElementById(key).setAttribute('src', url);
+                    })
+                    .catch(function(error) {
+                        document.getElementById('own').setAttribute('src', url);
+                        console.log(error);
+                    });
+            };
+
+            database.ref('storage/image').once('value')
+                .then(function(snapshot) {
+                    var data = snapshot.val();
+                    console.log('data:', data);
+                    for (var key in data) {
+                        setImage(key, data[key]);
+                    }
+                });
+
+            var uploadImage = function(file) {
+
+                var uid = '<%=user.uid%>';
+
+                console.log('uid:',uid);
+                /*
+                // Create a root storage.
+                var storageRef = firebase.storage().ref(uid+'/images');
+
+                // Create a reference to 'image'
+                //var fileRef = storageRef.child(filename);
+
+                var file = new File(filename);
+                console.dir(file);
+                */
+            };
+
+        </script>
+
+    </body>
+</html>

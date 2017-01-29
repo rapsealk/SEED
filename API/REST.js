@@ -15,6 +15,9 @@ exports.createUser = function(req, res) {
             admin.database().ref('userInfo/'+userRecord.uid).set({
                 userName: req.body.displayName
             });
+            var message = {};
+            message[new Date()-0] = 'Account Created!';
+            admin.database().ref('message/'+userRecord.uid).set(message);
             firebase.auth()
                 .signInWithEmailAndPassword(req.body.email, req.body.password)
                 .then(function() {
@@ -80,7 +83,8 @@ exports.updateUser = function(req, res) {
 // DELETE
 exports.deleteUser = function(req, res) {
 
-    var user = firebase.auth().currentUser;
+    var user = req.body.user;
+    //var user = firebase.auth().currentUser;
     var uid = user.uid;
 
     firebase.auth().signOut()

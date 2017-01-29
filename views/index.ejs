@@ -27,13 +27,18 @@
     <% } else { %>
     <h3>Hello, <%=email%>!</h3>
     <h3><a href="./info">User Info</a></h3>
+    <h3><a href="./gallery">Gallery</a></h3>
     <form action="./request/delete" method="post">
+      <input type="hidden" name="email" value="<%=email%>">
       <button type="submit" name="your_name" value="your_value" class="btn-link">Delete</button>
     </form>
     <h3><a href="./logout">Logout</a></h3>
     <% } %>
 
-    <img id="apink">
+    <img id="R2D2">
+    <img id="Apink">
+    <img id="TWICE">
+    <img id="favicon-firebase">
 
     <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
     <script>
@@ -45,15 +50,29 @@
             messagingSenderId: "204598217154"
         };
         firebase.initializeApp(config);
+        /*
+        var database = firebase.database();
         var storage = firebase.storage();
-        storage.ref().child('image/Apink.png').getDownloadURL()
-            .then(function(url) {
-                console.log('url:',url);
-                document.getElementById('apink').setAttribute('src', url);
-            })
-            .catch(function(error) {
-                console.log('error:',error);
+
+        var setImage = function(key, type) {
+            storage.ref('image').child(key+'.'+type).getDownloadURL()
+                .then(function(url) {
+                    document.getElementById(key).setAttribute('src', url);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        };
+
+        database.ref('storage/image').once('value')
+            .then(function(snapshot) {
+                var data = snapshot.val();
+                console.log('data:', data);
+                for (var key in data) {
+                    setImage(key, data[key]);
+                }
             });
+        */
     </script>
 
   </body>
