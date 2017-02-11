@@ -4,14 +4,7 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
-const index = require('./routes/index');
-const update = require('./routes/update');
-const signup = require('./routes/signup');
-const login = require('./routes/login');
-const logout = require('./routes/logout');
-const user = require('./routes/user');
-const problem = require('./routes/problem');
+const cors = require('cors');
 
 const firebase = require('firebase');
 const config = {
@@ -30,6 +23,17 @@ admin.initializeApp({
     databaseURL: 'https://seed-3a079.firebaseio.com'
 });
 
+const index = require('./routes/index');
+const update = require('./routes/update');
+const signup = require('./routes/signup');
+const login = require('./routes/login');
+const logout = require('./routes/logout');
+const info = require('./routes/info');
+const gallery = require('./routes/gallery');
+const message = require('./routes/message');
+const request = require('./routes/request');
+const problem = require('./routes/problem');
+
 const app = express();
 
 app.locals.pretty = true;
@@ -38,19 +42,23 @@ app.locals.pretty = true;
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon-firebase.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use('/', index);
 app.use('/update', update);
 app.use('/signup', signup);
 app.use('/login', login);
 app.use('/logout', logout);
-app.use('/user', user);
+app.use('/info', info);
+app.use('/gallery', gallery);
+app.use('/info/message', message);
+app.use('/request', request);
 app.use('/problem', problem);
 
 // catch 404 and forward to error handler

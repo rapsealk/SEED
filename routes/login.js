@@ -5,8 +5,15 @@ var firebase = require('firebase');
 var admin = require('firebase-admin');
 
 router.get('/', function(req, res) {
-    console.log('get::login');
-    res.render('login', { title: 'Login' });
+
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) { // User is signed in.
+            res.redirect('../');
+        } else { // No user is signed in.
+            res.render('login', { title: 'Login' });
+        }
+    });
+
 });
 
 router.post('/', function(req, res) {

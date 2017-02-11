@@ -5,7 +5,6 @@ var firebase = require('firebase');
 
 router.get('/', function(req, res) {
 
-    console.log('get::logout');
     firebase.auth().signOut()
         .then(function() {
             res.redirect('../');
@@ -16,7 +15,6 @@ router.get('/', function(req, res) {
 
 router.post('/', function(req, res) {
 
-    console.log('post::logout');
     firebase.auth()
         .signOut()
         .then(function() {
