@@ -22,3 +22,5 @@ function datestringify(now, time) {
 }
 
 module.exports = datestringify;
+
+// TODO replace with moment.js

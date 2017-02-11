@@ -83,6 +83,10 @@
             </a>
         </div>
 
+        <video id="backgroundVideo" autoplay loop>
+
+        </video>
+
         <style type="text/css">
             #progress-bar {
                 -webkit-appearance: none;
@@ -109,25 +113,31 @@
             var bar = document.getElementById('progress-bar');
             var upload = document.getElementById('uploadFile');
 
+            //$('#uploadFile').on('change', function(e) {
             upload.addEventListener('change', function(e) {
                 var file = e.target.files[0];
-                var ref = storage.ref(uid+'/'+file.name);
+                var type = file.type.split('/')[0];
+                // file.name file.size file.type
+                var ref = storage.ref(uid+'/'+type+'/'+file.name);
                 var task = ref.put(file);
                 task.on('state_changed',
                     function progress(snapshot) {
                         var percentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
-                        //bar.value = percentage;
                         bar.setAttribute('style', 'width:'+percentage+'%');
                         bar.innerHTML = percentage+'%';
                     },
-                    function error(err) {
-
+                    function error(error) {
+                        console.log('error:', error);
                     },
                     function complete() {
                         var timestamp = new Date().getTime();
                         var json = {};
-                        json[timestamp] = file.name;
-                        database.ref('storage').child(uid).update(json)
+                        json[timestamp] = {
+                            name: file.name,
+                            size: file.size,
+                            type: file.type
+                        };
+                        database.ref('storage').child(uid+'/'+type).update(json)
                             .then(function() {
                                 console.log('db updated:',file.name);
                                 window.location.href = window.location.href;
@@ -145,7 +155,7 @@
             };
 
             var setInner = function(inner, file) {
-                storage.ref(uid).child(file).getDownloadURL()
+                storage.ref(uid+'/image').child(file).getDownloadURL()
                     .then(function(url) {
                         var img = document.createElement('img');
                         img.setAttribute('src', url);
@@ -157,17 +167,20 @@
                         inner.children[0].className = 'item active';
                     })
                     .catch(function(error) {
-                        if (error) console.log(error);
+                        if (error) console.log('error:', error);
                     });
             };
 
-            database.ref('storage').child(uid).once('value')
+            database.ref('storage').child(uid+'/image').once('value')
                 .then(function(snapshot) {
                     var data = snapshot.val();
                     var indicator = document.getElementById('indicator');
                     var carouselInner = document.getElementById('carousel-inner');
                     for (var timestamp in data) {
-                        var file = data[timestamp];
+                        //if (data[timestamp].type.split('/')[0] != 'image') continue;
+                        //switch (data[timestamp].type.split('/')[0]) {
+                        //}
+                        var file = data[timestamp].name;
                         setInner(carouselInner, file);
                         var li = document.createElement('li');
                         li.setAttribute('data-target', '#myCarousel');
@@ -178,6 +191,28 @@
                     }
                 });
 
+            database.ref('storage').child(uid+'/video').once('value')
+                .then(function(snapshot) {
+                    var data = snapshot.val();
+                    var backgroundVideo = document.getElementById('backgroundVideo');
+                    for (var timestamp in data) {
+                        var file = data[timestamp].name;
+                        var type = data[timestamp].type;
+                        storage.ref(uid+'/video').child(file).getDownloadURL()
+                            .then(function(url) {
+                                var source = document.createElement('source');
+                                source.setAttribute('src', url);
+                                source.setAttribute('type', type);
+                                backgroundVideo.appendChild(source);
+                            })
+                            .catch(function(error) {
+                                console.log('error:', error);
+                            });
+                    }
+                })
+                .catch(function(error) {
+                    console.log('error:', error);
+                });
         </script>
     </body>
 </html>

@@ -6,17 +6,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const index = require('./routes/index');
-const update = require('./routes/update');
-const signup = require('./routes/signup');
-const login = require('./routes/login');
-const logout = require('./routes/logout');
-const info = require('./routes/info');
-const gallery = require('./routes/gallery');
-const message = require('./routes/message');
-const request = require('./routes/request');
-const problem = require('./routes/problem');
-
 const firebase = require('firebase');
 const config = {
     apiKey: "AIzaSyC54g3ZFHO0aq7jFUiaq6e0O0tzR4g3d5U",
@@ -33,6 +22,17 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://seed-3a079.firebaseio.com'
 });
+
+const index = require('./routes/index');
+const update = require('./routes/update');
+const signup = require('./routes/signup');
+const login = require('./routes/login');
+const logout = require('./routes/logout');
+const info = require('./routes/info');
+const gallery = require('./routes/gallery');
+const message = require('./routes/message');
+const request = require('./routes/request');
+const problem = require('./routes/problem');
 
 const app = express();
 
