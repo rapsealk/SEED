@@ -4,7 +4,7 @@ var router = express.Router();
 var firebase = require('firebase');
 var admin = require('firebase-admin');
 
-var rest = require('../API/REST');
+var rest = require('../routes/API/REST');
 
 router.get('/', function(req, res) {
     res.send('Hello World!');

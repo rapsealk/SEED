@@ -17,22 +17,16 @@ const config = {
 firebase.initializeApp(config);
 
 const admin = require('firebase-admin');
-var serviceAccount = require('./SEED-d6e717e515c6.json');
+const serviceAccount = require('./SEED-d6e717e515c6.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://seed-3a079.firebaseio.com'
 });
 
-const index = require('./routes/index');
-const update = require('./routes/update');
-const signup = require('./routes/signup');
-const login = require('./routes/login');
-const logout = require('./routes/logout');
-const info = require('./routes/info');
-const gallery = require('./routes/gallery');
-const message = require('./routes/message');
-const request = require('./routes/request');
-const problem = require('./routes/problem');
+const alarm = require('./routes/alarm');
+const messages = require('./routes/messages');
+const weather = require('./routes/weather');
+//const settings = require('./routes/settings');
 
 const app = express();
 
@@ -50,20 +44,34 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
-app.use('/', index);
-app.use('/update', update);
-app.use('/signup', signup);
-app.use('/login', login);
-app.use('/logout', logout);
-app.use('/info', info);
-app.use('/gallery', gallery);
-app.use('/info/message', message);
-app.use('/request', request);
-app.use('/problem', problem);
+//let token = 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImRkNjI0NzE1Y2RmZmIxNzZhN2M1ZDgwZDNlNzQ4MjgyYTgxMWY3ZmIifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc2VlZC0zYTA3OSIsIm5hbWUiOiJVU0VSLXM5MjAzMSIsInBpY3R1cmUiOiJodHRwczovL2ZpcmViYXNlc3RvcmFnZS5nb29nbGVhcGlzLmNvbS92MC9iL3NlZWQtM2EwNzkuYXBwc3BvdC5jb20vby9mYXZpY29uLWZpcmViYXNlLnBuZz9hbHQ9bWVkaWEmdG9rZW49ZDQ1NzJhZWEtMTkwMS00M2I4LWExNTAtNTA4OTg0MTAyZmM0IiwiYXVkIjoic2VlZC0zYTA3OSIsImF1dGhfdGltZSI6MTQ4Nzc0OTEzMiwidXNlcl9pZCI6InN6RzlVRkNIbzVNVUpQZ3Z5dUd0UTB2dVNWbzIiLCJzdWIiOiJzekc5VUZDSG81TVVKUGd2eXVHdFEwdnVTVm8yIiwiaWF0IjoxNDg3NzQ5MTQwLCJleHAiOjE0ODc3NTI3NDAsImVtYWlsIjoidGVzdEBzZWVkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJ0ZXN0QHNlZWQuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.vts_zoHNiPl2JiZhnzGEKtrUPYml3LVwhCyvNkcqfULSGQD-4RK4tgoT4zzuQYn4NJx0CxZhXi77yrltqu9DF2nQ4YwzO0ZJxUsFsovKsTvDdarOcUpLGG0aU8Sh3dfOeVYowkFKEBbsY9OIIopEpgfJv_kenXH0MO1ArRKqeg1iGAFMhiBL_3fze0SghPmlOrl1m3feiOvbY7IQjn3B9v7WAqaIS7NvnZNUfUBzV9e7uBMTAlFPajFrUkV1okgi1gqwObBEwSYZEuNVWJiaWaclsjnitD0W0V86VgnVe9k93UwjaPP6NUcAQPeVByRKTd_niePpf-7BB_SBvicfzw';
+
+app.post('/token', function(req, res) {
+    "use strict";
+    let email = req.body.email;
+    let password = req.body.password;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(function(userRecord) {
+            userRecord.getToken(true)
+                .then(function(idToken) {
+                    res.json({ protocol: 0, token: idToken });
+                })
+                .catch(function(error) {
+                    res.json({ protocol: 0, error: error });
+                });
+        })
+        .catch(function(error) {
+            res.json({ protocol: 0, error: error });
+        });
+});
+app.use('/alarm', alarm);
+app.use('/messages', messages);
+app.use('/weather', weather);
+//app.use('/settings', settings);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    let err = new Error('Not Found');
     err.status = 404;
     next(err);
 });

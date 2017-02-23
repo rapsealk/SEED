@@ -3,7 +3,7 @@ var router = express.Router();
 
 var fs = require('fs');
 
-var rest = require('../API/REST');
+var rest = require('../routes/API/REST');
 
 var firebase = require('firebase');
 var admin = require('firebase-admin');

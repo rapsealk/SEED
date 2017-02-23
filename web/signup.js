@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var rest = require('../API/REST');
+var rest = require('../routes/API/REST');
 
 router.get('/', function(req, res) {
     var alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
