@@ -13,4 +13,9 @@ router.post('/', function(req, res) {
     REST.messages.post(req, res);
 });
 
+router.delete('/', function(req, res) {
+    "use strict";
+    REST.messages.delete(req, res);
+});
+
 module.exports = router;
